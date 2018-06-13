@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "387304520691",
+    "firebase_url": "https://nenbeg-smart.firebaseio.com",
+    "project_id": "nenbeg-smart",
+    "storage_bucket": "nenbeg-smart.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387304520691:android:b17656cb1a2c7ebe",
+        "android_client_info": {
+          "package_name": "com.nenbeg.smart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387304520691-c4mijeupe9m6opncbbbva1jc9882o7a3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nenbeg.smart",
+            "certificate_hash": "fd704c8f5b20ee88d2c0a083ec3cae17c3c8be55"
+          }
+        },
+        {
+          "client_id": "387304520691-42g6235jj6r8khkjihaumdrikejsu2ka.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "387304520691-42g6235jj6r8khkjihaumdrikejsu2ka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIXe1tv6NkXFRQT7OEQWOwxGKzPQ9JZKw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387304520691-42g6235jj6r8khkjihaumdrikejsu2ka.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

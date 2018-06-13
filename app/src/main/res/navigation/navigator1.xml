@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/deviceFragment">
+
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.nenbeg.smart.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/addDeviceFragment"
+        android:name="com.nenbeg.smart.AddDeviceFragment"
+        android:label="fragment_add_device"
+        tools:layout="@layout/fragment_add_device">
+        <action android:id="@+id/action_addDeviceFragment_to_mainActivity" />
+        <action
+            android:id="@+id/nav_addDevice_to_devList"
+            app:destination="@id/deviceFragment" />
+        <action
+            android:id="@+id/nav_add_device_to_settings"
+            app:destination="@id/settingsActivity"
+            app:enterAnim="@anim/nav_default_pop_enter_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/deviceFragment"
+        android:name="com.nenbeg.smart.DeviceFragment"
+        android:label="nav_detail_frag_to_settings"
+        tools:layout="@layout/fragment_device_list">
+        <action
+            android:id="@+id/nav_device_detail"
+            app:destination="@id/deviceDetailFragment"
+            app:popUpTo="@+id/deviceFragment" />
+        <action
+            android:id="@+id/nav_add_device"
+            app:destination="@id/addDeviceFragment" />
+        <action
+            android:id="@+id/nav_to_settings"
+            app:destination="@id/settingsActivity" />
+
+        <argument
+            android:name="myarg"
+            app:type="string"
+            android:defaultValue="Home" />
+    </fragment>
+    <fragment
+        android:id="@+id/deviceDetailFragment"
+        android:name="com.nenbeg.smart.DeviceDetailFragment"
+        android:label="fragment_device_detail"
+        tools:layout="@layout/fragment_device_detail" >
+        <action
+            android:id="@+id/action_deviceDetailFragment_to_settingsActivity"
+            app:destination="@id/settingsActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/accueilFragment"
+        android:name="com.nenbeg.smart.ui.accueil.AccueilFragment"
+        android:label="accueil_fragment"
+        tools:layout="@layout/accueil_fragment" >
+        <action
+            android:id="@+id/action_accueilFragment_to_addDeviceFragment"
+            app:destination="@id/addDeviceFragment" />
+        <action
+            android:id="@+id/nav_acc_frag_to_settings"
+            app:destination="@id/settingsActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/accueilActivity"
+        android:name="com.nenbeg.smart.AccueilActivity"
+        android:label="accueil_activity"
+        tools:layout="@layout/accueil_activity" />
+    <fragment
+        android:id="@+id/viewModelFragment"
+        android:name="com.nenbeg.smart.ViewModelFragment"
+        android:label="view_model_fragment"
+        tools:layout="@layout/view_model_fragment" />
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="com.nenbeg.smart.SettingsActivity"
+        android:label="SettingsActivity" />
+</navigation>

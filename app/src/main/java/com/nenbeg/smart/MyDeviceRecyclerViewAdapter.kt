@@ -8,13 +8,13 @@ import android.widget.TextView
 
 
 import com.nenbeg.smart.DeviceFragment.OnListFragmentInteractionListener
-import com.nenbeg.smart.dummy.DummyContent.DummyItem
+
 import com.tuya.smart.sdk.bean.DeviceBean
 
 import kotlinx.android.synthetic.main.fragment_device.view.*
 
 /**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
+ * [RecyclerView.Adapter] that can display a [DeviceBean] and makes a call to the
  * specified [OnListFragmentInteractionListener].
  * TODO: Replace the implementation with code for your data type.
  */
@@ -27,7 +27,7 @@ class MyDeviceRecyclerViewAdapter(
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyItem
+            val item = v.tag as DeviceBean
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
             mListener?.onListFragmentInteraction(item)

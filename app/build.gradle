@@ -63,6 +63,7 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
@@ -93,20 +94,26 @@ dependencies {
 
     implementation "com.firebase:firebase-jobdispatcher:0.8.5"
 
-    implementation "com.google.firebase:firebase-analytics:$fb_version"
-    implementation "com.google.firebase:firebase-database:$fb_version"
-    implementation "com.google.firebase:firebase-firestore:$fb_version"
-    implementation "com.google.firebase:firebase-storage:$fb_version"
-    implementation "com.google.firebase:firebase-auth:$fb_version"
-    implementation "com.google.firebase:firebase-config:$fb_version"
-    implementation "com.google.firebase:firebase-appindexing:$fb_version"
-    implementation "com.google.firebase:firebase-crash:$fb_version"
-    implementation "com.google.firebase:firebase-messaging:$fb_version"
+    implementation "com.google.firebase:firebase-core:16.0.0"
+    //implementation "com.google.firebase:firebase-database:16.0.1"
+    implementation "com.google.firebase:firebase-firestore:17.0.1"
+    implementation "com.google.firebase:firebase-storage:16.0.1"
+    implementation "com.google.firebase:firebase-auth:16.0.1"
+    //implementation "com.google.firebase:firebase-config:16.0.0"
+    //implementation "com.google.firebase:firebase-appindexing:15.0.1"
+    implementation "com.google.firebase:firebase-crash:16.0.0"
+    implementation "com.google.firebase:firebase-messaging:17.0.0"
+    implementation 'com.google.firebase:firebase-iid:16.0.0'
+
+
 
     implementation 'com.firebaseui:firebase-ui-auth:4.0.0'
 
-    implementation "com.google.android.gms:play-services-appinvite:$fb_version_old"
-    implementation "com.google.android.gms:play-services-ads:$fb_version_old"
+    implementation "com.google.android.gms:play-services-measurement-base:15.0.0"
+    //implementation "com.google.android.gms:play-services-appinvite:15.0.0"
+    implementation "com.google.android.gms:play-services-ads:15.0.1"
+    implementation "com.google.android.gms:play-services-base:15.0.1"
+    //implementation 'androidx.recyclerview:recyclerview:1.0.0-alpha3'
 
 
 }

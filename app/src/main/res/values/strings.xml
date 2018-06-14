@@ -105,6 +105,7 @@
     <!-- Twitter consumer key and secret -->
     <string name="twitter_consumer_key" translatable="false">YOUR_CONSUMER_KEY</string>
     <string name="twitter_consumer_secret" translatable="false">YOUR_CONSUMER_SECRET</string>
+    <string name="app_name_short">NS</string>
 
 
 </resources>

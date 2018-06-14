@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.nenbeg.smart.dummy.DummyContent.DummyItem
 import com.tuya.smart.sdk.TuyaUser
+import com.tuya.smart.sdk.bean.DeviceBean
 
 /**
  * A fragment representing a list of Items.
@@ -39,7 +40,9 @@ class DeviceFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
 
-            val listDevices= TuyaUser.getDeviceInstance().getDevList();
+            //val listDevices= TuyaUser.getDeviceInstance().getDevList();
+
+            val listDevices= generateDevicesList()
 
             with(view) {
                 layoutManager = when {
@@ -79,7 +82,7 @@ class DeviceFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
+        fun onListFragmentInteraction(item: DeviceBean?)
     }
 
     companion object {
@@ -95,5 +98,34 @@ class DeviceFragment : Fragment() {
                         putInt(ARG_COLUMN_COUNT, columnCount)
                     }
                 }
+
+        fun generateDevicesList():List<DeviceBean>{
+
+            val val1= DeviceBean()
+            val1.name="Device1"
+            val1.category="category"
+            val1.devId="dev1"
+
+            val val2= DeviceBean()
+            val2.name="Device2"
+            val2.category="category"
+            val2.devId="dev2"
+
+
+            val val3= DeviceBean()
+            val3.name="Device3"
+            val3.category="category"
+            val3.devId="dev3"
+
+
+            val retour= listOf<DeviceBean>(val1,val2,val3)
+
+            return retour
+
+
+
+            //TuyaUser.getDeviceInstance().devList
+
+        }
     }
 }

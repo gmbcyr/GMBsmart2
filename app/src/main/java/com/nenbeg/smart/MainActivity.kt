@@ -23,6 +23,7 @@ import com.tuya.smart.android.user.api.IRegisterCallback
 import com.tuya.smart.android.user.api.IResetPasswordCallback
 import com.tuya.smart.android.user.bean.User
 import com.tuya.smart.sdk.TuyaUser
+import com.tuya.smart.sdk.bean.DeviceBean
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -56,9 +57,14 @@ class MainActivity : AppCompatActivity(),DeviceFragment.OnListFragmentInteractio
 
 
 
-    override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
+    override fun onListFragmentInteraction(item: DeviceBean?) {
 
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val intent = Intent(this, DeviceDetailFragment::class.java)
+        // To pass any data to next activity
+        intent.putExtra("id", item!!.devId )
+        intent.putExtra("nom", item!!.name )
+        // start your next activity
+        startActivity(intent)
     }
 
     override fun onFragmentInteraction(uri: Uri) {
@@ -237,10 +243,10 @@ class MainActivity : AppCompatActivity(),DeviceFragment.OnListFragmentInteractio
 
 
 
-                TuyaUser.getUserInstance().
+                /*TuyaUser.getUserInstance().
 
 
-                TuyaUser.getUserInstance().registerAccountWithUid(countryCode,  uid,  password, tuyaListnerReg);
+                TuyaUser.getUserInstance().registerAccountWithUid(countryCode,  uid,  password, tuyaListnerReg);*/
                 // ...
             } else {
 
@@ -256,7 +262,7 @@ class MainActivity : AppCompatActivity(),DeviceFragment.OnListFragmentInteractio
 
     fun tuyaDeviceFunction(){
 
-        TuyaUser.getDeviceInstance().getDevList();
+      /*  TuyaUser.getDeviceInstance().getDevList();
 //云端查询单个设备信息
         TuyaUser.getDeviceInstance().queryGw(String gwId);
 //销毁监听事件，清理缓存数据，需要在退出时进行调用
@@ -268,7 +274,7 @@ class MainActivity : AppCompatActivity(),DeviceFragment.OnListFragmentInteractio
 //从本地缓存中获取所有设备列表
         TuyaUser.getDeviceInstance().getDevList();
 //获取设备schema信息
-        TuyaUser.getDeviceInstance().getSchema(String devId);
+        TuyaUser.getDeviceInstance().getSchema(String devId);*/
     }
 
 

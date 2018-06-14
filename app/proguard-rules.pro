@@ -55,3 +55,6 @@ public void onEvent*(**);
 
 -keep class com.tuya.smart.**{*;}
 -dontwarn com.tuya.smart.**
+
+-keepattributes Signature
+-keepattributes *Annotation*

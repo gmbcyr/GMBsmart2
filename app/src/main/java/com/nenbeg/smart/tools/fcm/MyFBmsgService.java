@@ -16,12 +16,12 @@ import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
-import com.gmb.bbm2.MainTabActivity;
-import com.gmb.bbm2.R;
-import com.gmb.bbm2.tools.alarm.MyJobService;
-import com.gmb.bbm2.tools.allstatic.AllStaticKt;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.nenbeg.smart.MainActivity;
+import com.nenbeg.smart.R;
+import com.nenbeg.smart.allstatic.AllStaticKt;
+import com.nenbeg.smart.tools.alarm.MyJobService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -196,7 +196,7 @@ public class MyFBmsgService extends FirebaseMessagingService {
 
 
     private void createNotification( String messageBody) {
-        Intent intent = new Intent( this , MainTabActivity. class );
+        Intent intent = new Intent( this , MainActivity. class );
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("msg",messageBody);
         PendingIntent resultIntent = PendingIntent.getActivity( this , 0, intent,
@@ -204,7 +204,7 @@ public class MyFBmsgService extends FirebaseMessagingService {
 
         Uri notificationSoundURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder mNotificationBuilder = new NotificationCompat.Builder( this)
-                .setSmallIcon(R.drawable.ic_menu_camera)
+                //.setSmallIcon(R.drawable.ic_menu_camera)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(messageBody)
                 .setAutoCancel( true )

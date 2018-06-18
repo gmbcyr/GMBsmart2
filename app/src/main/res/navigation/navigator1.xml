@@ -53,6 +53,39 @@
             android:id="@+id/action_deviceDetailFragment_to_settingsActivity"
             app:destination="@id/settingsActivity" />
     </fragment>
+
+
+    <fragment
+        android:id="@+id/deviceEventFragment"
+        android:name="com.nenbeg.smart.DeviceEventFragment"
+        android:label="fragment_device_detail"
+        tools:layout="@layout/fragment_device_detail" >
+        <action
+            android:id="@+id/action_deviceFragment_to_deviceEventFragment"
+            app:destination="@id/settingsActivity" />
+    </fragment>
+
+
+    <!--fragment
+        android:id="@+id/deviceHistoActivity"
+        android:name="com.nenbeg.smart.DeviceHistoric"
+        android:label="Device Histo Activity"
+        tools:layout="@layout/fragment_device_detail" >
+        <action
+            android:id="@+id/action_deviceFragment_to_deviceHistoActivity"
+            app:destination="@id/deviceHistoActivity" />
+    </fragment-->
+
+    <activity
+        android:id="@+id/deviceHistoActivity"
+        android:name="com.nenbeg.smart.DeviceHistoric"
+        android:label="Device Histo Activity"
+        tools:layout="@layout/activity_device_historic" >
+        <action
+            android:id="@+id/action_deviceFragment_to_deviceEventFragment"
+            app:destination="@id/settingsActivity" />
+    </activity>
+
     <fragment
         android:id="@+id/accueilFragment"
         android:name="com.nenbeg.smart.ui.accueil.AccueilFragment"

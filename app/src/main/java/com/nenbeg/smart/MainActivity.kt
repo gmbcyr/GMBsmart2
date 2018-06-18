@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.nenbeg.smart.R.id.accueil_bottom_nav
 import com.nenbeg.smart.allstatic.generateUserPwd
 import com.nenbeg.smart.dummy.DummyContent
 import com.tuya.smart.android.user.api.ILoginCallback
@@ -30,7 +31,14 @@ import java.util.*
 
 
 
-class MainActivity : AppCompatActivity(),DeviceFragment.OnListFragmentInteractionListener,AddDeviceFragment.OnFragmentInteractionListener,DeviceDetailFragment.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity(),DeviceFragment.OnListFragmentInteractionListener,AddDeviceFragment.OnFragmentInteractionListener,
+        DeviceDetailFragment.OnFragmentInteractionListener,
+        DeviceEventFragment.OnListFragmentInteractionListener{
+
+
+    override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     lateinit var navControl: NavController
     private val TAG="NBG_ACCUEIL"
@@ -59,12 +67,25 @@ class MainActivity : AppCompatActivity(),DeviceFragment.OnListFragmentInteractio
 
     override fun onListFragmentInteraction(item: DeviceBean?) {
 
-        val intent = Intent(this, DeviceDetailFragment::class.java)
+        /*val intent = Intent(this, DeviceDetailFragment::class.java)
         // To pass any data to next activity
         intent.putExtra("id", item!!.devId )
         intent.putExtra("nom", item!!.name )
         // start your next activity
-        startActivity(intent)
+        startActivity(intent)*/
+
+
+        /*val detailsFragment =
+    RageComicDetailsFragment.newInstance(comic)
+supportFragmentManager.beginTransaction()
+    .replace(R.id.root_layout, detailsFragment, "rageComicDetails")
+    .addToBackStack(null)
+    .commit()*/
+
+
+        navControl!!.navigate(R.id.deviceHistoActivity)
+        //return@OnNavigationItemSelectedListener true
+
     }
 
     override fun onFragmentInteraction(uri: Uri) {

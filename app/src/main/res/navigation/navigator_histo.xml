@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/deviceEventFragment">
+
+
+    <fragment
+        android:id="@+id/deviceEventFragment"
+        android:name="com.nenbeg.smart.DeviceEventFragment"
+        android:label="nav_device_histo"
+        tools:layout="@layout/fragment_deviceevent_list">
+        <action
+            android:id="@+id/nav_device_detail"
+            app:destination="@id/deviceDetailFragment"
+            app:popUpTo="@+id/deviceFragment" />
+        <action
+            android:id="@+id/nav_add_device"
+            app:destination="@id/addDeviceFragment" />
+        <action
+            android:id="@+id/nav_to_settings"
+            app:destination="@id/settingsActivity" />
+
+        <argument
+            android:name="myarg"
+            app:type="string"
+            android:defaultValue="Home" />
+    </fragment>
+
+</navigation>

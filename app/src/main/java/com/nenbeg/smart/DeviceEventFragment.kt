@@ -1,5 +1,6 @@
 package com.nenbeg.smart
 
+import android.arch.lifecycle.Lifecycle
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -85,6 +86,15 @@ class DeviceEventFragment : Fragment() {
         // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
 
+        private const val ARG_EVENT = "event"
+
+        /*fun bundleArgs(event: Lifecycle.Event): Bundle {
+            return Bundle().apply {
+                this.putParcelable(ARG_EVENT, event)
+            }
+        }*/
+
+
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
@@ -93,5 +103,8 @@ class DeviceEventFragment : Fragment() {
                         putInt(ARG_COLUMN_COUNT, columnCount)
                     }
                 }
+
+
+
     }
 }

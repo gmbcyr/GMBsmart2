@@ -64,6 +64,13 @@ class DeviceFragment : Fragment() {
         }
     }
 
+
+    override fun onStart() {
+        super.onStart()
+
+        listener!!.onBackToAccueilFragment("data")
+    }
+
     override fun onDetach() {
         super.onDetach()
         listener = null
@@ -83,6 +90,8 @@ class DeviceFragment : Fragment() {
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onListFragmentInteraction(item: DeviceBean?)
+
+        fun onBackToAccueilFragment( data:String)
     }
 
     companion object {

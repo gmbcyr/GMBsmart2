@@ -34,6 +34,13 @@ import java.util.*
 class MainActivity : AppCompatActivity(),DeviceFragment.OnListFragmentInteractionListener,AddDeviceFragment.OnFragmentInteractionListener,
         DeviceDetailFragment.OnFragmentInteractionListener,
         DeviceEventFragment.OnListFragmentInteractionListener{
+    override fun onBackToAccueilFragment(data: String) {
+
+        accueil_bottom_nav.menu.clear()
+
+
+        accueil_bottom_nav.inflateMenu(R.menu.nav_accueil)
+    }
 
 
     override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
@@ -82,9 +89,25 @@ supportFragmentManager.beginTransaction()
     .addToBackStack(null)
     .commit()*/
 
+        val args=Bundle()
+        args.putString("id",item!!.devId)
+        args.putString("nom",item!!.name)
 
-        navControl!!.navigate(R.id.deviceHistoActivity)
+        navControl!!.navigate(R.id.deviceEventFragment,args)
         //return@OnNavigationItemSelectedListener true
+
+        /*accueil_bottom_nav.menu.removeItem(R.id.navigation_home)
+        accueil_bottom_nav.menu.removeItem(R.id.navigation_dashboard)
+        accueil_bottom_nav.menu.removeItem(R.id.navigation_notifications)
+        accueil_bottom_nav.menu.removeItem(R.id.nav_add_device)
+        accueil_bottom_nav.menu.removeItem(R.id.nav_device_detail)*/
+
+
+
+        accueil_bottom_nav.menu.clear()
+
+
+        accueil_bottom_nav.inflateMenu(R.menu.nav_device_histo_bottom)
 
     }
 
@@ -205,6 +228,7 @@ supportFragmentManager.beginTransaction()
 
         accueil_bottom_nav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
+
         navControl= findNavController(this,R.id.nav_host_fragment)
 
         setupActionBarWithNavController(this,navControl)
@@ -215,6 +239,8 @@ supportFragmentManager.beginTransaction()
             NavigationUI.setupWithNavController(bottomNavView, navControl)
         }*/
     }
+
+
 
 
     private fun showSignInScreen() {

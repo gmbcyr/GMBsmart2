@@ -63,6 +63,18 @@
         <action
             android:id="@+id/action_deviceFragment_to_deviceEventFragment"
             app:destination="@id/settingsActivity" />
+        <argument
+            android:name="idDevice"
+            app:type="string"
+            android:defaultValue="0"/>
+        <argument
+            android:name="name"
+            app:type="String"
+            android:defaultValue=" "/>
+        <argument
+            android:name="deviceAsJson"
+            app:type="string"
+            android:defaultValue=" "/>
     </fragment>
 
 

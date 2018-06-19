@@ -113,6 +113,7 @@ dependencies {
     //implementation "com.google.android.gms:play-services-appinvite:15.0.0"
     implementation "com.google.android.gms:play-services-ads:15.0.1"
     implementation "com.google.android.gms:play-services-base:15.0.1"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
     //implementation 'androidx.recyclerview:recyclerview:1.0.0-alpha3'
 
 

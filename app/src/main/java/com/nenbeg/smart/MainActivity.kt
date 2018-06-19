@@ -100,7 +100,36 @@ supportFragmentManager.beginTransaction()
         accueil_bottom_nav.menu.removeItem(R.id.navigation_dashboard)
         accueil_bottom_nav.menu.removeItem(R.id.navigation_notifications)
         accueil_bottom_nav.menu.removeItem(R.id.nav_add_device)
-        accueil_bottom_nav.menu.removeItem(R.id.nav_device_detail)*/
+        accueil_bottom_nav.menu.removeItem(R.id.nav_device_detail)
+
+
+
+        val options = NavOptions.Builder()
+    .setEnterAnim(R.anim.slide_in_right)
+    .setExitAnim(R.anim.slide_out_left)
+    .setPopEnterAnim(R.anim.slide_in_left)
+    .setPopExitAnim(R.anim.slide_out_right)
+    .build()
+
+view.findViewById<Button>(R.id.navigate_dest_bt)?.setOnClickListener {
+    findNavController(it).navigate(R.id.flow_step_one, null, options)
+}
+
+
+
+
+
+Bundle args = new Bundle();
+args.putString("myarg", "From Widget");
+PendingIntent pendingIntent = new NavDeepLinkBuilder(context)
+    .setGraph(R.navigation.mobile_navigation)
+    .setDestination(R.id.android)
+    .setArguments(args)
+    .createPendingIntent();
+
+remoteViews.setOnClickPendingIntent(R.id.deep_link, pendingIntent);
+
+        */
 
 
 

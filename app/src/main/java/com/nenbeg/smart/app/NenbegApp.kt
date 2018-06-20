@@ -1,6 +1,7 @@
 package com.nenbeg.smart.app
 
 import android.app.Application
+import android.content.Context
 import com.tuya.smart.sdk.TuyaSdk
 import com.tuya.smart.sdk.TuyaUser
 
@@ -28,6 +29,11 @@ class NenbegApp : Application() {
 
 
         PACKAGE_NAME = applicationContext.packageName
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        //MultiDex.install(this)
     }
 
 

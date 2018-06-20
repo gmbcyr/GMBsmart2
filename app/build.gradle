@@ -16,6 +16,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
 
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -113,8 +114,10 @@ dependencies {
     //implementation "com.google.android.gms:play-services-appinvite:15.0.0"
     implementation "com.google.android.gms:play-services-ads:15.0.1"
     implementation "com.google.android.gms:play-services-base:15.0.1"
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    //implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
     //implementation 'androidx.recyclerview:recyclerview:1.0.0-alpha3'
+
+    implementation 'com.android.support:multidex:1.0.3'
 
 
 }

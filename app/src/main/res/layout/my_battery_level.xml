@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/band1"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+
+                android:background="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/band2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/band3"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/band4"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/band5"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/band6"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"/>
+
+            <TextView
+                android:id="@+id/band7"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/band8"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/band9"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/band10"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/txtLevelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Level - 75%"
+            android:gravity="center_horizontal|center_vertical"
+            android:layout_gravity="center_vertical|left"/>
+
+
+</LinearLayout>

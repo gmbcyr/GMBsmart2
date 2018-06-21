@@ -107,6 +107,10 @@
     <string name="twitter_consumer_secret" translatable="false">YOUR_CONSUMER_SECRET</string>
     <string name="app_name_short">NS</string>
     <string name="title_activity_device_historic">Device Historic</string>
+    <string name="last_alarm">Last Alarm Off</string>
+    <string name="histo_event">Device Historic</string>
+    <string name="nbre_year">Total this year</string>
+    <string name="nbre_month">Total this Month</string>
 
 
 </resources>

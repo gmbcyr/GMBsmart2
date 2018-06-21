@@ -1,0 +1,32 @@
+<resources>
+
+    <declare-styleable name="ButtonBarContainerTheme">
+        <attr name="metaButtonBarStyle" format="reference" />
+        <attr name="metaButtonBarButtonStyle" format="reference" />
+    </declare-styleable>
+
+
+    <declare-styleable name="customSpinnerAsInput">
+        <attr name="spinHint" format="string" />
+        <attr name="spinDefault" format="string"/>
+        <attr name="spinHeight" format="dimension" />
+        <attr name="spinWidth" format="dimension" />
+        <attr name="spinTextSize" format="dimension" />
+        <attr name="spinTextColor" format="color" />
+        <attr name="spinfillColor" format="color" />
+        <attr name="spinListVal" format="enum" />
+        <attr name="spinListShown" format="enum" />
+        <attr name="spinPrompt" format="string" />
+        <attr name="android:entries" />
+    </declare-styleable>
+
+    <declare-styleable name="MyBatteryLevel">
+
+        <attr name="battLvlColor" format="color"  />
+        <attr name="battLvlShowText" format="boolean" />
+        <attr name="battLvlLevel" format="integer" />
+        <attr name="battLvlTextShown" format="string" />
+
+    </declare-styleable>
+
+</resources>

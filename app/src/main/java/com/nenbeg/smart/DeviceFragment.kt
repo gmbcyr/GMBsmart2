@@ -6,12 +6,12 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import com.nenbeg.smart.dummy.DummyContent.DummyItem
 import com.tuya.smart.sdk.TuyaUser
 import com.tuya.smart.sdk.bean.DeviceBean
+
 
 /**
  * A fragment representing a list of Items.
@@ -31,20 +31,27 @@ class DeviceFragment : Fragment() {
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
+
+
+        // Here notify the fragment that it should participate in options menu handling.
+        setHasOptionsMenu(true);
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_device_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_device_list2, container, false)
+
+
+        val recyView = view.findViewById<RecyclerView>(R.id.list)
 
         // Set the adapter
-        if (view is RecyclerView) {
+        if (recyView is RecyclerView) {
 
             //val listDevices= TuyaUser.getDeviceInstance().getDevList();
 
             val listDevices= generateDevicesList()
 
-            with(view) {
+            with(recyView) {
                 layoutManager = when {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
@@ -54,6 +61,38 @@ class DeviceFragment : Fragment() {
         }
         return view
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
+        // First clear current all the menu items
+        menu.clear();
+
+        // Add the new menu items
+        inflater.inflate(R.menu.top_menu, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+
+
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            /*R.id.post_stuff -> {
+                Log.d(TAG, "Will post the photo to server")
+                return true
+            }
+            R.id.cancel_post -> {
+                Log.d(TAG, "Will cancel post the photo")
+                return true
+            }
+            else -> {
+            }*/
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

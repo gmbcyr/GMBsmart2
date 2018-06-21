@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/deviceFragment"
         android:name="com.nenbeg.smart.DeviceFragment"
-        android:label="nav_detail_frag_to_settings"
+        android:label="Home"
         tools:layout="@layout/fragment_device_list">
         <action
             android:id="@+id/nav_device_detail"
@@ -58,7 +58,7 @@
     <fragment
         android:id="@+id/deviceEventFragment"
         android:name="com.nenbeg.smart.DeviceEventFragment"
-        android:label="fragment_device_detail"
+        android:label="Fragment Activity Historic"
         tools:layout="@layout/fragment_device_detail" >
         <action
             android:id="@+id/action_deviceFragment_to_deviceEventFragment"

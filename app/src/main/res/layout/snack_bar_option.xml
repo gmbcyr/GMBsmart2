@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="343dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="top|center_horizontal"
+        android:text="@string/snack_notif_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Switch
+        android:id="@+id/swc_detection"
+        android:layout_width="343dp"
+        android:layout_height="11dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/swc_detect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+
+    <Switch
+        android:id="@+id/swc_bat_level"
+        android:layout_width="341dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/battery_level"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swc_detection" />
+
+    <Switch
+        android:id="@+id/swc_critical"
+        android:layout_width="342dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/critical_alarm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swc_bat_level" />
+
+    <TextView
+        android:id="@+id/txt_id_alarm"
+        android:layout_width="340dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swc_critical" />
+
+    <TextView
+        android:id="@+id/txtDone"
+        android:layout_width="344dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/done"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.Widget.PopupMenu.Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/space" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="368dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="738dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtDone"
+        app:layout_constraintTop_toBottomOf="@+id/swc_critical" />
+</android.support.constraint.ConstraintLayout>

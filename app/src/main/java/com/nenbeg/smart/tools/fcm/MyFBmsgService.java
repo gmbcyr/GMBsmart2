@@ -1,5 +1,6 @@
 package com.nenbeg.smart.tools.fcm;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -22,6 +24,7 @@ import com.nenbeg.smart.MainActivity;
 import com.nenbeg.smart.R;
 import com.nenbeg.smart.allstatic.AllStaticKt;
 import com.nenbeg.smart.tools.alarm.MyJobService;
+import com.nenbeg.smart.tools.makecall.CallReceiver;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -54,12 +57,11 @@ public class MyFBmsgService extends FirebaseMessagingService {
                 //sendNotification(data);
                 //insertSquawk(data);
 
-                String typem=data.get(AllStaticKt.getBBM_TYPE_MSG());
+                String typem=data.get(AllStaticKt.getNENB_TYPE_MSG());
 
-                if(AllStaticKt.getBBM_MSG_UPDATE_ALARM().equalsIgnoreCase(typem)){
+                if(AllStaticKt.getNENB_MSG_CRITICAL().equalsIgnoreCase(typem)){
 
-
-                    updateListAlarm(data);
+                    setUpARingingView(2000,getString(R.string.fakecallname),getString(R.string.fakecallnumber));
 
                 }
 
@@ -87,12 +89,19 @@ public class MyFBmsgService extends FirebaseMessagingService {
                 //sendNotification(data);
                 //insertSquawk(data);
 
-                String typem=data.get(AllStaticKt.getBBM_TYPE_MSG());
-
-                if(AllStaticKt.getBBM_MSG_UPDATE_ALARM().equalsIgnoreCase(typem)){
+                String typem=data.get(AllStaticKt.getNENB_TYPE_MSG());
 
 
-                    JSONObject jsObj = new JSONObject(data.get(AllStaticKt.getBBM_MSG_CONTENT()));
+
+
+
+
+
+
+                if(AllStaticKt.getNENB_MSG_WARNING().equalsIgnoreCase(typem)){
+
+
+                    JSONObject jsObj = new JSONObject(data.get(AllStaticKt.getNENB_MSG_CONTENT()));
 
                     //JSONObject jsObj = new JSONObject(data.get("body"));
 
@@ -101,7 +110,7 @@ public class MyFBmsgService extends FirebaseMessagingService {
 
 
 
-                    JSONArray alarmListNew=jsObj.getJSONArray(AllStaticKt.getBBM_MSG_CONTENT_LIST());
+                    JSONArray alarmListNew=jsObj.getJSONArray(AllStaticKt.getNENB_MSG_CONTENT_LIST());
 
                     Log.e(TAG, "updateListAlarm Message data payload alarmList->: " + alarmListNew);
 
@@ -109,7 +118,7 @@ public class MyFBmsgService extends FirebaseMessagingService {
 
                     FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(getApplicationContext()));
 
-                    String oldSetup=AllStaticKt.getPreferenceVal(getApplicationContext(),AllStaticKt.getBBM_MSG_PREF_NAME(),AllStaticKt.getBBM_UPDATE_ALARM_LIST_OLD());
+                    String oldSetup=AllStaticKt.getPreferenceVal(getApplicationContext(),AllStaticKt.getNENB_MSG_PREF_NAME(),AllStaticKt.getNENB_UPDATE_ALARM_LIST_OLD());
 
                     JSONObject jsOld=null;
 
@@ -120,7 +129,7 @@ public class MyFBmsgService extends FirebaseMessagingService {
 
                     if(jsOld!=null){
 
-                        JSONArray alarmListOld=jsOld.getJSONArray(AllStaticKt.getBBM_MSG_CONTENT_LIST());
+                        JSONArray alarmListOld=jsOld.getJSONArray(AllStaticKt.getNENB_MSG_CONTENT_LIST());
 
 
                         int tail=alarmListOld.length();
@@ -183,7 +192,7 @@ public class MyFBmsgService extends FirebaseMessagingService {
                 }
 
 
-                AllStaticKt.setPreferenceVal(getApplicationContext(),AllStaticKt.getBBM_MSG_PREF_NAME(),AllStaticKt.getBBM_UPDATE_ALARM_LIST_OLD(),data.get(AllStaticKt.getBBM_MSG_CONTENT()));
+                AllStaticKt.setPreferenceVal(getApplicationContext(),AllStaticKt.getNENB_MSG_PREF_NAME(),AllStaticKt.getNENB_UPDATE_ALARM_LIST_OLD(),data.get(AllStaticKt.getNENB_MSG_CONTENT()));
 
             }
             //create notification
@@ -215,5 +224,24 @@ public class MyFBmsgService extends FirebaseMessagingService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0, mNotificationBuilder.build());
+    }
+
+
+
+    public void setUpARingingView(long selectedTimeInMilliseconds, String name, String number){
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, CallReceiver.class);
+
+        intent.putExtra("NAME", name);
+        intent.putExtra("NUMBER", number);
+
+        PendingIntent fakePendingIntent = PendingIntent.getBroadcast(this, 0,  intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, selectedTimeInMilliseconds, fakePendingIntent);
+        Toast.makeText(getApplicationContext(), "Your call time has been set", Toast.LENGTH_SHORT).show();
+
+        Intent intents = new Intent(this, MainActivity.class);
+        startActivity(intents);
+
     }
 }

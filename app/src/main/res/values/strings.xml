@@ -10,6 +10,9 @@
     <string name="navigation_list_title">List</string>
     <string name="title_activity_settings">Settings</string>
 
+    <string name="deviceIDtest" translatable="false">AZl0feOBbofkPl</string>
+    <string name="default_notification_channel_id">NENB</string>
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
@@ -111,6 +114,14 @@
     <string name="histo_event">Device Historic</string>
     <string name="nbre_year">Total this year</string>
     <string name="nbre_month">Total this Month</string>
+    <string name="snack_notif_title">NOTIFICATIONS</string>
+    <string name="swc_detect">Notify on leack detected</string>
+    <string name="battery_level">Notifify on Battery low</string>
+    <string name="critical_alarm">Is a critical alarm</string>
+    <string name="done">DONE</string>
+    <string name="incomingcall">Incoming call</string>
+    <string name="fakecallname">Water Leak Detector</string>
+    <string name="fakecallnumber">0000852951753</string>
 
 
 </resources>

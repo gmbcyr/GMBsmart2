@@ -4,9 +4,13 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.nenbeg.smart.tools.tuya.helper.MyTuyaDeviceRegister
+import kotlinx.android.synthetic.main.fragment_add_device.*
+import kotlinx.android.synthetic.main.fragment_add_device.view.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -23,7 +27,21 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class AddDeviceFragment : Fragment() {
+class AddDeviceFragment : Fragment(),View.OnClickListener {
+    override fun onClick(v: View?) {
+
+        when (v!!.id){
+
+            R.id.cmdScan-> {
+
+                //message.setText(R.string.title_home)
+                val dvRegister=MyTuyaDeviceRegister(this.requireContext())
+
+                dvRegister.registerDevice()
+            }
+        }
+    }
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -40,7 +58,12 @@ class AddDeviceFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_device, container, false)
+        val rootView= inflater.inflate(R.layout.fragment_add_device, container, false)
+
+        rootView.cmdScan.setOnClickListener(this)
+
+
+        return rootView
     }
 
     // TODO: Rename method, update argument and hook method into UI event

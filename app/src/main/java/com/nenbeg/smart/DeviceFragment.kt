@@ -22,6 +22,7 @@ class DeviceFragment : Fragment() {
 
     // TODO: Customize parameters
     private var columnCount = 1
+     val TAG:String="DeviceFragment"
 
     private var listener: OnListFragmentInteractionListener? = null
 
@@ -149,6 +150,16 @@ class DeviceFragment : Fragment() {
 
         fun generateDevicesList():List<DeviceBean>{
 
+
+            val devList=TuyaUser.getDeviceInstance().getDevList();
+
+
+            Log.e("DeviceFragment","DeviceFragment generateDevicesList list->"+devList)
+
+            /*val devi= TuyaUser.getDeviceInstance().getDev("AZ0on5zxaMYQRu");
+
+            Log.e("DeviceFragment","DeviceFragment generateDevicesList static device->"+devi)*/
+
             val val1= DeviceBean()
             val1.name="Device1"
             val1.category="category"
@@ -168,7 +179,10 @@ class DeviceFragment : Fragment() {
 
             val retour= listOf<DeviceBean>(val1,val2,val3)
 
-            return retour
+            devList.addAll(retour)
+
+
+            return devList
 
 
 

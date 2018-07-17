@@ -118,7 +118,7 @@ class MyBatteryLevel(context: Context, attrs: AttributeSet) : LinearLayout(conte
 
     fun updateView(){
 
-        txtBatteryLevel.setText(battText+battLevel+"%")
+        txtBatteryLevel.setText(battText+" "+battLevel+"%")
 
 
         val ind=battLevel/10

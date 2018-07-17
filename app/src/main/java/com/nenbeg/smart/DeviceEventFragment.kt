@@ -2,15 +2,22 @@ package com.nenbeg.smart
 
 import android.arch.lifecycle.Lifecycle
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import android.widget.ImageView
 
 import com.nenbeg.smart.dummy.DummyContent
 import com.nenbeg.smart.dummy.DummyContent.DummyItem
+import com.nenbeg.smart.tools.customviews.CustomSnackBar
+import com.nenbeg.smart.tools.customviews.MyBatteryLevel
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_deviceevent_list2.*
+import kotlinx.android.synthetic.main.snack_bar_option.view.*
 
 /**
  * A fragment representing a list of Items.
@@ -32,7 +39,7 @@ class DeviceEventFragment : Fragment() {
         }
 
         // Here notify the fragment that it should participate in options menu handling.
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +58,21 @@ class DeviceEventFragment : Fragment() {
                 adapter = MyDeviceEventRecyclerViewAdapter(DummyContent.ITEMS, listener)
             }
         }
+
+        val myBatLevel=view.findViewById<MyBatteryLevel>(R.id.myBatLevel)
+
+        myBatLevel.setupAttributes("Lvl", Color.GREEN,true,90)
+
+
+
+        val imgNotif=view.findViewById<ImageView>(R.id.imgNotif)
+
+        imgNotif.setOnClickListener { view ->
+
+            val snack=CustomSnackBar.getSnackBar(this.requireContext(),view,"deviceID2")
+        }
+
+
         return view
     }
 
@@ -58,14 +80,23 @@ class DeviceEventFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
         // First clear current all the menu items
-        menu.clear();
+       /* menu.clear();
 
         // Add the new menu items
-        inflater.inflate(R.menu.menu_device_event, menu);
-
-        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_device_event, menu);*/
 
 
+
+
+        //super.onCreateOptionsMenu(menu, inflater);
+
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if(listener!=null) listener!!.hideNavigationForHistoFragment("data")
     }
 
     override fun onAttach(context: Context) {
@@ -96,6 +127,8 @@ class DeviceEventFragment : Fragment() {
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         fun onListFragmentInteraction(item: DummyItem?)
+
+        fun hideNavigationForHistoFragment( data:String)
     }
 
     companion object {

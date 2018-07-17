@@ -2,13 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nenbeg.smart">
 
-    <meta-data
-        android:name="TUYA_SMART_APPKEY"
-        android:value="mjq8ges7cdemywrcv3hd" />
-    <meta-data
-        android:name="TUYA_SMART_SECRET"
-        android:value="4wmjghygsv5e4vwvdrythetwkfxqduqs" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -29,13 +22,39 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".app.NenbegApp">
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notifications_black_24dp" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id"/>
+        <meta-data
+            android:name="TUYA_SMART_APPKEY"
+            android:value="mjq8ges7cdemywrcv3hd" />
+        <meta-data
+            android:name="TUYA_SMART_SECRET"
+            android:value="4wmjghygsv5e4vwvdrythetwkfxqduqs" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -90,6 +109,17 @@
         <activity
             android:name=".DeviceHistoric"
             android:label="@string/title_activity_device_historic"></activity>
+
+        <service
+            android:name=".tools.fcm.MyFBmsgService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".tools.makecall.CallReceiver" />
+
+        <activity android:name=".tools.makecall.RingingActivity"></activity>
     </application>
 
 </manifest>

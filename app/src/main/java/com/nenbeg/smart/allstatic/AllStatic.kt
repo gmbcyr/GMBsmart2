@@ -6,10 +6,18 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.preference.PreferenceManager
 import android.support.annotation.Nullable
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.firebase.ui.auth.AuthUI.getApplicationContext
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.flags.impl.SharedPreferencesFactory.getSharedPreferences
 import com.google.firebase.auth.FirebaseUser
+import com.nenbeg.smart.app.NenbegInstallation
 import com.nenbeg.smart.tools.firestore.MyFirestoreEditor
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -59,13 +67,15 @@ public val notifSendLock = Any()
 
 
 /*******************************************************************Static field for FCM exchance********************************************************/
-val BBM_TYPE_MSG="bbmTypeMessage"
-val BBM_MSG_UPDATE_ALARM="bbmUpdateUalarm"
-val BBM_MSG_CONTENT="bbm-msg-content"
-val BBM_MSG_CONTENT_LIST="bbm-msg-content-list"
-val BBM_MSG_PREF_NAME="bbm-msg-pref-name"
-val BBM_UPDATE_ALARM_LIST_NEW="bbm-update-alarm-list-new"
-val BBM_UPDATE_ALARM_LIST_OLD="bbm-update-alarm-list-old"
+val NENB_TYPE_MSG="nenbTypeMessage"
+val NENB_MSG_INFOS="nenb-msg-infos"
+val NENB_MSG_WARNING="nenb-msg-warning"
+val NENB_MSG_CRITICAL="nenb-msg-critical"
+val NENB_MSG_CONTENT="nenb-msg-content"
+val NENB_MSG_CONTENT_LIST="nenb-msg-content-list"
+val NENB_MSG_PREF_NAME="nenb-msg-pref-name"
+val NENB_UPDATE_ALARM_LIST_NEW="nenb-update-alarm-list-new"
+val NENB_UPDATE_ALARM_LIST_OLD="nenb-update-alarm-list-old"
 
 
 private var myFbEditor: MyFirestoreEditor?=null
@@ -761,4 +771,101 @@ fun generateUserPwd(fbUser: FirebaseUser):String{
 
 
     return res
+}
+
+
+
+
+
+
+fun fetchUserString(userId: String) = async {
+    // request user from network
+    // return user String
+    "val retour"
+}
+
+fun deserializeUser(userString: String) = async {
+    // deserialize
+    // return User
+    "User "
+}
+
+val starting= launch(UI) {
+
+    //progressBar.visibility = View.VISIBLE
+    try {
+        val userString = fetchUserString("1").await()
+        val user = deserializeUser(userString).await()
+        //showUserData(user)
+    } catch (ex: Exception) {
+        //log(ex)
+    } finally {
+        // progressBar.visibility = View.GONE
+    }
+
+}
+
+
+
+/********************************SAVE NEW CREDENTIALS AFTER FIREBASE AUTHENTIFICATION*************************************************/
+
+
+private fun saveNewCredentials(context: Context,acct: GoogleSignInAccount) {
+
+    val json = HashMap<String, Any>()
+    try {
+
+        val bb = NenbegInstallation()
+        val idDD = bb.id(context)
+        val emailKey = getEmailAsKey(acct.email!!)
+
+
+
+        json[ROOT_USER_PATH] = emailKey
+        //json[USER_EMAIL] = acct.email
+        json.put(USER_EMAIL,acct.email!!)
+
+        //json["name"] = acct.displayName
+        json.put("name",acct.displayName!!)
+        json["photoUrl"] = acct.photoUrl!!.toString()
+
+
+
+        json["deviceID"] = bb.id(context)
+        json["deviceName"] = bb.getDeviceName()
+        json["deviceModel"] = bb.getDeviceModel()
+        //jsonD.put("token",acct.getIdToken()); DO NOT TOUCH THIS, ONLY EDIT ON REGISTRATION NEW TOKEN
+        json["dateLogin"] = System.currentTimeMillis().toString() + ""
+        json["dateLoginReadable"] = Date(System.currentTimeMillis()).toString() + ""
+
+
+        //Save credentials to pref
+        val pref = context.getSharedPreferences(PREF_FOR_DATA_PATH, Context.MODE_PRIVATE)
+        val editPref = pref.edit()
+        editPref.putString(ROOT_USER_PATH, emailKey)
+        editPref.putString(USER_EMAIL, json[USER_EMAIL].toString())
+        editPref.putString(DEVICE_ID, json["deviceID"].toString())
+        editPref.putLong(DEVICE_ID_CREATED, java.lang.Long.valueOf(json["dateLogin"].toString()))
+
+
+        editPref.commit()
+
+
+        sendRegistrationToServer(context,json["deviceID"].toString(), json)
+
+    } catch (ex: Exception) {
+
+        Log.d("AllStatic", "AllStatic saveNewCredentials *************Refreshed token Error: ")
+        ex.printStackTrace()
+    }
+
+}
+
+
+private fun sendRegistrationToServer(context: Context,id: String, data: Map<String, Any>) {
+    //Implement this method if you want to store the token on your server
+
+    val editor = MyFirestoreEditor(context)
+
+    editor.saveInitParam(id, data, null, false, data)
 }

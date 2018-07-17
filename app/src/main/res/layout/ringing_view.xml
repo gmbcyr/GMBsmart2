@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nenbeg.smart.tools.makecall.RingingActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:background="#52DD63"
+        tools:context="inducesmile.com.androidfakecallapplication.FakeRingingActivity">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:text="@string/incomingcall"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="375dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/textView1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:contentDescription="@null"
+            android:src="@drawable/urgent" />
+
+        <TextView
+            android:id="@+id/chosenfakename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/imageView1"
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp"
+            android:text="@string/fakecallname" />
+
+        <TextView
+            android:id="@+id/chosenfakenumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/chosenfakename"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:text="@string/fakecallnumber" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/chosenfakenumber"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:background="#ffffff">
+
+            <Button
+                android:id="@+id/answercall"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="26dp"
+                android:layout_marginLeft="29dp"
+                android:contentDescription="@null"
+                android:background="@drawable/accept_call" />
+
+            <Button
+                android:id="@+id/rejectcall"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="29dp"
+                android:layout_marginBottom="26dp"
+                android:contentDescription="@null"
+                android:background="@drawable/decline" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

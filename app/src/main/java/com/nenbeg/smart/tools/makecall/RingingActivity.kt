@@ -1,10 +1,12 @@
 package com.nenbeg.smart.tools.makecall
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.os.Bundle
+import android.os.PowerManager
 import android.support.v7.app.AppCompatActivity
 import android.telephony.TelephonyManager
 import android.view.View
@@ -30,6 +32,11 @@ class RingingActivity : AppCompatActivity() {
 
         val tm = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
         networkCarrier = tm.networkOperatorName
+
+
+        val waker=WakeMyScreenUp(applicationContext)
+
+        waker.wakeup(10000)
 
         val titleBar = findViewById(R.id.textView1) as TextView
         if (networkCarrier != null) {
@@ -60,13 +67,26 @@ class RingingActivity : AppCompatActivity() {
         val answerCall = findViewById(R.id.answercall) as Button
         val rejectCall = findViewById(R.id.rejectcall) as Button
 
-        answerCall.setOnClickListener { mp?.stop() }
-        rejectCall.setOnClickListener {
-            mp?.stop()
+        answerCall.setOnClickListener { mp?.stop()
+            mp?.isLooping=false
+            mp?.release()
+
             val homeIntent = Intent(Intent.ACTION_MAIN)
             homeIntent.addCategory(Intent.CATEGORY_HOME)
             homeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(homeIntent)
+            finish()
+
+        }
+        rejectCall.setOnClickListener {
+            mp?.stop()
+            mp?.isLooping=false
+            mp?.release()
+            val homeIntent = Intent(Intent.ACTION_MAIN)
+            homeIntent.addCategory(Intent.CATEGORY_HOME)
+            homeIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(homeIntent)
+            finish()
         }
     }
 

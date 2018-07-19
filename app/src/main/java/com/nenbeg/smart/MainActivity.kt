@@ -1,12 +1,19 @@
 package com.nenbeg.smart
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.ComponentName
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
+import android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -23,11 +30,13 @@ import com.nenbeg.smart.R.id.accueil_bottom_nav
 import com.nenbeg.smart.allstatic.generateUserPwd
 import com.nenbeg.smart.app.NenbegApp
 import com.nenbeg.smart.dummy.DummyContent
+import com.nenbeg.smart.tools.alarm.MyNotifListnerService
 import com.tuya.smart.android.base.TuyaSmartSdk.appkey
 import com.tuya.smart.android.user.api.ILoginCallback
 import com.tuya.smart.android.user.api.IRegisterCallback
 import com.tuya.smart.android.user.api.IResetPasswordCallback
 import com.tuya.smart.android.user.bean.User
+import com.tuya.smart.common.i
 import com.tuya.smart.sdk.*
 import com.tuya.smart.sdk.bean.DeviceBean
 import kotlinx.android.synthetic.main.activity_main.*
@@ -39,6 +48,9 @@ import java.util.*
 class MainActivity : AppCompatActivity(),DeviceFragment.OnListFragmentInteractionListener,AddDeviceFragment.OnFragmentInteractionListener,
         DeviceDetailFragment.OnFragmentInteractionListener,
         DeviceEventFragment.OnListFragmentInteractionListener{
+
+    private var nReceiver: MyNotifListnerService.NLServiceReceiver? = null
+
     override fun hideNavigationForHistoFragment(data: String) {
 
         accueil_bottom_nav.visibility= View.GONE
@@ -263,6 +275,30 @@ remoteViews.setOnClickPendingIntent(R.id.deep_link, pendingIntent);
 
 
 
+
+        /**********************Manage notificaions listner*******************************/
+
+        // If the user did not turn the notification listener service on we prompt him to do so
+        if(!isNotificationServiceEnabled()){
+            val enableNotificationListenerAlertDialog = buildNotificationServiceAlertDialog()
+            enableNotificationListenerAlertDialog.show()
+        }
+
+
+        nReceiver = MyNotifListnerService().NLServiceReceiver()
+        val filter=IntentFilter()
+        filter.addAction("com.nenbeg.com.tools.alarm")
+        registerReceiver(nReceiver,filter)
+
+
+
+
+
+
+
+
+
+
         mUsername = ANONYMO
 
         // Initialize Firebase Auth
@@ -285,6 +321,10 @@ remoteViews.setOnClickPendingIntent(R.id.deep_link, pendingIntent);
         }
 
         accueil_bottom_nav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+
+
+
 
 
         navControl= findNavController(this,R.id.nav_host_fragment)
@@ -386,6 +426,64 @@ remoteViews.setOnClickPendingIntent(R.id.deep_link, pendingIntent);
     }
 
 
+
+    /**
+     * Is Notification Service Enabled.
+     * Verifies if the notification listener service is enabled.
+     * Got it from: https://github.com/kpbird/NotificationListenerService-Example/blob/master/NLSExample/src/main/java/com/kpbird/nlsexample/NLService.java
+     * @return True if eanbled, false otherwise.
+     */
+    fun isNotificationServiceEnabled():Boolean{
+
+        val pkgName = getPackageName();
+        val  flat = Settings.Secure.getString(getContentResolver(),
+                ENABLED_NOTIFICATION_LISTENERS);
+        if (!TextUtils.isEmpty(flat)) {
+            val  names = flat.split(":")
+            val tail=names.size-1
+            for (i in 0..tail) {
+                val  cn = ComponentName.unflattenFromString(names[i]);
+                if (cn != null) {
+                    if (TextUtils.equals(pkgName, cn.getPackageName())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+
+    }
+
+
+
+    /**
+     * Build Notification Listener Alert Dialog.
+     * Builds the alert dialog that pops up if the user has not turned
+     * the Notification Listener Service on yet.
+     * @return An alert dialog which leads to the notification enabling screen
+     */
+    fun buildNotificationServiceAlertDialog():AlertDialog{
+
+        val alertDialogBuilder =  AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle(R.string.notification_listener_service);
+        alertDialogBuilder.setMessage(R.string.notification_listener_service_explanation)
+
+        alertDialogBuilder.setPositiveButton(R.string.yes){dialog, which ->
+                        startActivity( Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS));
+                    }
+
+
+        alertDialogBuilder.setNegativeButton(R.string.no){dialog, which ->
+                        // If you choose to not enable the notification listener
+                        // the app. will not work as expected
+                    }
+
+        return(alertDialogBuilder.create());
+
+    }
+
+
+
     fun tuyaDeviceFunction(){
 
       /*  TuyaUser.getDeviceInstance().getDevList();
@@ -467,5 +565,21 @@ remoteViews.setOnClickPendingIntent(R.id.deep_link, pendingIntent);
         }
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        unregisterReceiver(nReceiver)
+    }
+
     override fun onSupportNavigateUp() = findNavController(this,R.id.nav_host_fragment).navigateUp()
+
+
+
+    companion object {
+
+        private val ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners"
+        private val ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
+
+    }
 }

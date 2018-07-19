@@ -122,6 +122,11 @@
     <string name="incomingcall">Incoming call</string>
     <string name="fakecallname">Water Leak Detector</string>
     <string name="fakecallnumber">0000852951753</string>
+    <string name="my_notif_listner">My Notif Listner</string>
+    <string name="notification_listener_service">My Notif Listner</string>
+    <string name="notification_listener_service_explanation">My Notif Listner Serv</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 
 </resources>

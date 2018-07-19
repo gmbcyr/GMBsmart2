@@ -25,6 +25,7 @@ import com.nenbeg.smart.R;
 import com.nenbeg.smart.allstatic.AllStaticKt;
 import com.nenbeg.smart.tools.alarm.MyJobService;
 import com.nenbeg.smart.tools.makecall.CallReceiver;
+import com.nenbeg.smart.tools.makecall.WakeMyScreenUp;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,7 +44,7 @@ public class MyFBmsgService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         //Log data to Log Cat
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "MyFBmsgServic OnMessageReceived From: " + remoteMessage.getFrom());
        // Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
 
         Map<String, String> data = remoteMessage.getData();
@@ -51,7 +52,7 @@ public class MyFBmsgService extends FirebaseMessagingService {
         try {
 
             if (data.size() > 0) {
-                Log.e(TAG, "onMessageReceived Message data payload: " + data);
+                Log.e(TAG, "MyFBmsgServic OnMessageReceived  Message data payload: " + data+"_from ->"+remoteMessage.getFrom()+"_collapseKey ->"+remoteMessage.getCollapseKey()+"_from ->"+remoteMessage.toString());
 
                 // Send a notification that you got a new message
                 //sendNotification(data);
@@ -61,7 +62,7 @@ public class MyFBmsgService extends FirebaseMessagingService {
 
                 if(AllStaticKt.getNENB_MSG_CRITICAL().equalsIgnoreCase(typem)){
 
-                    setUpARingingView(2000,getString(R.string.fakecallname),getString(R.string.fakecallnumber));
+                    //setUpARingingView(2000,getString(R.string.fakecallname),getString(R.string.fakecallnumber));
 
                 }
 
@@ -229,6 +230,9 @@ public class MyFBmsgService extends FirebaseMessagingService {
 
 
     public void setUpARingingView(long selectedTimeInMilliseconds, String name, String number){
+
+        WakeMyScreenUp waker=new WakeMyScreenUp(getApplication());
+        waker.wakeup(10000);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, CallReceiver.class);

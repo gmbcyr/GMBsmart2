@@ -2,10 +2,7 @@ package com.nenbeg.smart
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ComponentName
-import android.content.DialogInterface
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -22,24 +19,31 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.nenbeg.smart.R.id.accueil_bottom_nav
-import com.nenbeg.smart.allstatic.generateUserPwd
+import com.nenbeg.smart.allstatic.*
 import com.nenbeg.smart.app.NenbegApp
+import com.nenbeg.smart.app.NenbegApp.Companion.userOwnerEmail
+import com.nenbeg.smart.app.NenbegApp.Companion.userOwnerUid
+import com.nenbeg.smart.app.NenbegInstallation
 import com.nenbeg.smart.dummy.DummyContent
 import com.nenbeg.smart.tools.alarm.MyNotifListnerService
+import com.nenbeg.smart.tools.firestore.MyFirestoreEditor
 import com.tuya.smart.android.base.TuyaSmartSdk.appkey
 import com.tuya.smart.android.user.api.ILoginCallback
 import com.tuya.smart.android.user.api.IRegisterCallback
 import com.tuya.smart.android.user.api.IResetPasswordCallback
 import com.tuya.smart.android.user.bean.User
+import com.tuya.smart.common.bb
 import com.tuya.smart.common.i
 import com.tuya.smart.sdk.*
 import com.tuya.smart.sdk.bean.DeviceBean
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
 import java.util.*
 
 
@@ -47,7 +51,8 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(),DeviceFragment.OnListFragmentInteractionListener,AddDeviceFragment.OnFragmentInteractionListener,
         DeviceDetailFragment.OnFragmentInteractionListener,
-        DeviceEventFragment.OnListFragmentInteractionListener{
+        DeviceEventFragment.OnListFragmentInteractionListener,
+        DeviceSettingFragment.OnListFragmentInteractionListener{
 
     private var nReceiver: MyNotifListnerService.NLServiceReceiver? = null
 
@@ -114,9 +119,21 @@ supportFragmentManager.beginTransaction()
     .addToBackStack(null)
     .commit()*/
 
+        var json=JSONObject()
+
+        json.put("id",item?.devId)
+        json.put("name",item?.name)
+
+        json.put("bv",item?.bv)
+        json.put("isOnline",item?.isOnline)
+
+        json.put("category",item?.category)
+        json.put("batLevel",(10..100).myRandomInt())
+
         val args=Bundle()
-        args.putString("id",item!!.devId)
-        args.putString("nom",item!!.name)
+
+
+        args.putString("jsonDevice",json.toString())
 
         navControl!!.navigate(R.id.deviceEventFragment,args)
         //return@OnNavigationItemSelectedListener true
@@ -166,6 +183,9 @@ remoteViews.setOnClickPendingIntent(R.id.deep_link, pendingIntent);
         accueil_bottom_nav
 
     }
+
+
+
 
     override fun onFragmentInteraction(uri: Uri) {
 
@@ -280,8 +300,15 @@ remoteViews.setOnClickPendingIntent(R.id.deep_link, pendingIntent);
 
         // If the user did not turn the notification listener service on we prompt him to do so
         if(!isNotificationServiceEnabled()){
-            val enableNotificationListenerAlertDialog = buildNotificationServiceAlertDialog()
-            enableNotificationListenerAlertDialog.show()
+
+            try {
+                val enableNotificationListenerAlertDialog = buildNotificationServiceAlertDialog()
+                enableNotificationListenerAlertDialog.show()
+            }
+            catch (ex:Exception){
+
+                ex.printStackTrace()
+            }
         }
 
 
@@ -309,9 +336,18 @@ remoteViews.setOnClickPendingIntent(R.id.deep_link, pendingIntent);
             // Not signed in, launch the Sign In activity
             //startActivity(Intent(this, SignInActivity::class.java))
             showSignInScreen()
-            finish()
+            //finish()
             return
         } else {
+
+            NenbegApp.apply {
+
+                userOwnerEmail=mFirebaseUser?.email!!
+                userOwnerUid=mFirebaseUser?.uid!!
+
+                Log.e("MainActivity","MainActivity OnCreate userOwnerEmail->"+userOwnerEmail+"_userOwnerUid ->"+userOwnerUid)
+            }
+
 
             mUsername = mFirebaseUser!!.getDisplayName()
             //Log.e("MainTabActivity","this is FirebaseUser name->"+mUsername)
@@ -388,8 +424,11 @@ remoteViews.setOnClickPendingIntent(R.id.deep_link, pendingIntent);
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        Log.e(TAG, "*************MainActivity onActivityResult : ")
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
+
+            Log.e(TAG, "*************MainActivity onActivityResult 1: ")
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
@@ -399,22 +438,37 @@ remoteViews.setOnClickPendingIntent(R.id.deep_link, pendingIntent);
 
                 Toast.makeText(this,"Authentification success for ->"+mFirebaseUser!!.displayName,Toast.LENGTH_LONG)
 
+                Log.e(TAG, "*************MainActivity onActivityResult 2: ")
+
 
                 val countryCode="1"
                 val uid=mFirebaseUser!!.uid
                 val password= generateUserPwd(mFirebaseUser!!)
 
 
+                NenbegApp().apply {
 
+                    userOwnerEmail=mFirebaseUser?.email!!
+                    userOwnerUid=mFirebaseUser?.uid!!
+                }
 
+                saveNewCredentials(response!!,mFirebaseUser!!)
+
+                Log.e(TAG, "*************MainActivity onActivityResult 3: ")
 
 
                 /*TuyaUser.getUserInstance().
 
 
                 TuyaUser.getUserInstance().registerAccountWithUid(countryCode,  uid,  password, tuyaListnerReg);*/
+
+                //startActivity(Intent(applicationContext, MainActivity::class.java))
+
+                Log.e(TAG, "*************MainActivity onActivityResult 4: ")
                 // ...
             } else {
+
+                Log.e(TAG, "*************MainActivity onActivityResult error: ")
 
                 Toast.makeText(this,"Authentification failed for ->"+response!!.error!!.localizedMessage,Toast.LENGTH_LONG)
                 // Sign in failed. If response is null the user canceled the
@@ -426,9 +480,154 @@ remoteViews.setOnClickPendingIntent(R.id.deep_link, pendingIntent);
     }
 
 
+    /**
+     * USe this function to save new credential in FB
+     */
+    private fun saveNewCredentials(acct: IdpResponse,fbUser:FirebaseUser) {
+
+        val json = HashMap<String, Any>()
+        try {
+
+            val myAppInstall = NenbegInstallation()
+            val idDD = myAppInstall.id(applicationContext)
+            val emailKey = getEmailAsKey(acct?.email as String)
+
+
+            Log.e(TAG, "*************MainActivity saveNewCredentials : ")
+
+
+            json[ROOT_USER_PATH] = emailKey
+            json[USER_EMAIL] = acct?.email as String
+            //json["name"] = acct?.user?.name
+            json["providerType"] = acct.providerType
+
+            if(acct?.idpSecret !=null){
+
+
+                json["idpSecret"] = acct?.idpSecret as String
+            }
+
+
+
+            if(acct?.idpToken  !=null){
+
+
+                json["idpToken"] = acct?.idpToken as String
+            }
+
+
+
+            if(acct?.phoneNumber  !=null){
+
+
+                json["phoneNumber"] = acct?.phoneNumber as String
+            }
+
+
+            Log.e(TAG, "*************MainActivity saveNewCredentials 2: ")
+
+            json["deviceID"] = myAppInstall.id(applicationContext)
+            json["deviceName"] = myAppInstall.getDeviceName()
+            json["deviceModel"] = myAppInstall.getDeviceModel()
+            //jsonD.put("token",acct.getIdToken()); DO NOT TOUCH THIS, ONLY EDIT ON REGISTRATION NEW TOKEN
+            json["dateLogin"] = System.currentTimeMillis().toString() + ""
+            json["dateLoginReadable"] = Date(System.currentTimeMillis()).toString() + ""
+
+
+
+            /*******************************GET DATA FROM FIREBASE USER*****************************/
+
+            if(fbUser?.photoUrl  !=null){
+
+
+                json["photoUrl-FB"] = fbUser?.photoUrl?.toString() as String
+            }
+
+
+            if(fbUser?.uid  !=null){
+
+
+                json["uid-FB"] = fbUser?.uid
+            }
+
+
+            if(fbUser?.displayName  !=null){
+
+
+                json["displayName-FB"] = fbUser?.displayName as String
+            }
+
+
+            if(fbUser?.email  !=null){
+
+
+                json["email-FB"] = fbUser?.email as String
+            }
+
+
+            if(fbUser?.phoneNumber  !=null){
+
+
+                json["phoneNumber-FB"] = fbUser?.phoneNumber as String
+            }
+
+
+
+            if(fbUser?.providerId  !=null){
+
+
+                json["providerId-FB"] = fbUser?.providerId as String
+            }
+
+
+            Log.e(TAG, "*************MainActivity saveNewCredentials 3: ")
+
+
+
+            //Save credentials to pref
+            val pref = getSharedPreferences(PREF_FOR_DATA_PATH, Context.MODE_PRIVATE)
+            val editPref = pref.edit()
+            editPref.putString(ROOT_USER_PATH, emailKey)
+            editPref.putString(USER_EMAIL, json[USER_EMAIL].toString())
+            editPref.putString(DEVICE_ID, json["deviceID"].toString())
+            editPref.putLong(DEVICE_ID_CREATED, java.lang.Long.valueOf(json["dateLogin"].toString()))
+
+
+            editPref.commit()
+
+
+            Log.e(TAG, "*************MainActivity saveNewCredentials 4: ")
+            sendRegistrationToServer(json["deviceID"].toString(), json)
+
+            Log.e(TAG, "*************MainActivity saveNewCredentials 5: ")
+        } catch (ex: Exception) {
+
+            Log.d(TAG, "*************MainActivity saveNewCredentials Error: ")
+            ex.printStackTrace()
+        }
+
+    }
+
 
     /**
-     * Is Notification Service Enabled.
+     * Actually send param to server
+     */
+
+    private fun sendRegistrationToServer(id: String, data: Map<String, Any>) {
+        //Implement this method if you want to store the token on your server
+
+        Log.e(TAG, "*************MainActivity sendRegistrationToServer 0: ")
+        val editor = MyFirestoreEditor(applicationContext)
+
+        Log.e(TAG, "*************MainActivity sendRegistrationToServer 1: ")
+        editor.saveInitParam(id, data, null, true, data)
+        Log.e(TAG, "*************MainActivity sendRegistrationToServer after: ")
+    }
+
+
+
+    /**
+    * Is Notification Service Enabled.
      * Verifies if the notification listener service is enabled.
      * Got it from: https://github.com/kpbird/NotificationListenerService-Example/blob/master/NLSExample/src/main/java/com/kpbird/nlsexample/NLService.java
      * @return True if eanbled, false otherwise.

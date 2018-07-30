@@ -11,7 +11,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import com.nenbeg.smart.R
+import com.nenbeg.smart.allstatic.*
 import kotlinx.android.synthetic.main.snack_bar_option.view.*
+import nl.komponents.kovenant.Kovenant.context
+import org.json.JSONObject
 import java.nio.file.Files.getAttribute
 
 
@@ -21,6 +24,29 @@ class CustomSnackBar {
     companion object {
 
         public fun getSnackBar(context:Context,src: View?,idDevice:String){
+
+
+            //Get the device saved pref
+
+            var jsonDevice= getDevicePreferenceAsJson(context,idDevice)
+
+            if(!jsonDevice.has(DEVICE_PREF_NOTIF_ON_ALARM)){
+
+                jsonDevice.put(DEVICE_PREF_NOTIF_ON_ALARM,true)
+                updateUserPref(context,jsonDevice)
+            }
+
+            if(!jsonDevice.has(DEVICE_PREF_NOTIF_IS_CRITICAL)){
+
+                jsonDevice.put(DEVICE_PREF_NOTIF_IS_CRITICAL,false)
+                updateUserPref(context,jsonDevice)
+            }
+
+            if(!jsonDevice.has(DEVICE_PREF_NOTIF_ON_BATTERY)){
+
+                jsonDevice.put(DEVICE_PREF_NOTIF_ON_BATTERY,true)
+                updateUserPref(context,jsonDevice)
+            }
 
             //Log.e("Tag", "getSnackBar pos *****************************")
 
@@ -37,7 +63,12 @@ class CustomSnackBar {
 // Inflate our custom view
             val snackView = LayoutInflater.from(context).inflate(R.layout.snack_bar_option, null)
 
-            val  snackDismiss=snackbar
+            snackView.apply {
+
+                swc_detection.isChecked=jsonDevice.getBoolean(DEVICE_PREF_NOTIF_ON_ALARM)
+                swc_bat_level.isChecked=jsonDevice.getBoolean(DEVICE_PREF_NOTIF_ON_BATTERY)
+                swc_critical.isChecked=jsonDevice.getBoolean(DEVICE_PREF_NOTIF_IS_CRITICAL)
+            }
 
             snackView.txtDone.setOnClickListener { view ->
 
@@ -50,20 +81,23 @@ class CustomSnackBar {
 
             snackView.swc_bat_level.setOnClickListener { view ->
 
-                updateUserPref(context)
+                jsonDevice.put(DEVICE_PREF_NOTIF_ON_BATTERY,snackView.swc_bat_level.isChecked)
+                updateUserPref(context,jsonDevice)
             }
 
             //Log.e("Tag", "getSnackBar pos 3*****************************")
 
             snackView.swc_critical.setOnClickListener { view ->
 
-                updateUserPref(context)
+                jsonDevice.put(DEVICE_PREF_NOTIF_IS_CRITICAL,snackView.swc_critical.isChecked)
+                updateUserPref(context,jsonDevice)
             }
 
 
             snackView.swc_detection.setOnClickListener { view ->
 
-                updateUserPref(context)
+                jsonDevice.put(DEVICE_PREF_NOTIF_ON_ALARM,snackView.swc_detection.isChecked)
+                updateUserPref(context,jsonDevice)
             }
 
 
@@ -83,7 +117,9 @@ class CustomSnackBar {
         }
 
 
-        fun updateUserPref(context: Context){
+        fun updateUserPref(context: Context,json:JSONObject){
+
+            saveDevicePreference(context,json.getString("id"),json)
 
             Toast.makeText(context,"User Pref Updated",Toast.LENGTH_LONG).show()
         }

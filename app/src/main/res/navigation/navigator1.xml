@@ -74,7 +74,7 @@
         <argument
             android:name="deviceAsJson"
             app:type="string"
-            android:defaultValue=" "/>
+            android:defaultValue=" "/><action android:id="@+id/nav_add_device_to_setting_fragment" app:destination="@id/deviceSettingFragment" app:enterAnim="@anim/fui_slide_in_right"/>
     </fragment>
 
 
@@ -124,4 +124,8 @@
         android:id="@+id/settingsActivity"
         android:name="com.nenbeg.smart.SettingsActivity"
         android:label="SettingsActivity" />
+    <fragment
+        android:id="@+id/deviceSettingFragment"
+        android:name="com.nenbeg.smart.DeviceSettingFragment"
+        android:label="DeviceSettingFragment" />
 </navigation>

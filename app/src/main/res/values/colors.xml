@@ -3,5 +3,53 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="white">#FFFFFF</color>
+
+    <color name="primary">#388E3C</color>
+    <color name="primary_dark">#1B5E20</color>
+    <color name="primary_dark_total">#33691E</color>
+    <color name="primary_less">#4CAF50</color>
+    <color name="primary_light_100">#C8E6C9</color>
+    <color name="accent">@color/primary_dark</color>
+    <color name="accent_transparent">#10AEEA00</color>
+    <color name="accent_transparent_moins_2">#30AEEA00</color>
+    <color name="accent_400">#C6FF00</color>
+    <color name="button_background">#F9FBE7</color>
+    <color name="grey_600">#757575</color>
+    <color name="grey_200_transparent">#22EEEEEE</color>
+    <color name="red_600">#E53935</color>
+    <color name="red_900">#B71C1C</color>
+    <color name="red_500">#F44336</color>
+    <color name="red_500_transparent">#30F44336</color>
+    <color name="red_200_transparent">#22EF9A9A</color>
+    <color name="blue_grey_900">#263238</color>
+    <color name="blue_grey_400">#78909C</color>
+    <color name="white">#ffffff</color>
+    <color name="back_color1">#f0f0f0</color>
+    <color name="back_color2">#f4f4f4</color>
+    <color name="black">#000000</color>
+    <color name="black_transparent">#79000000</color>
+    <color name="black_transparent_moins">#99000000</color>
+    <color name="black_transparent_moins2">#DF000000</color>
+    <color name="effet_damier1">@color/primary</color>
+    <color name="effet_damier3">@color/primary_dark</color>
+
+    <color name="show_case_col">@color/black_transparent_moins</color>
+    <color name="show_case_col2">@color/black_transparent_moins2</color>
+
+
+    <color name="transparent">#00FFFFFF</color>
+    <color name="opaque">#D4D4D4</color>
+    <color name="opaque2">#90C1C6CF</color>
+    <color name="opaque_white">#FDFDFD</color>
+    <color name="opaque_white_trans">#55FDFDFD</color>
+    <color name="green">#4499CC00</color>
+    <color name="darkgreen">#FF669900</color>
+
+    <color name="today">#4b82ff</color>
+    <color name="greyed_out">#c7c7c7</color>
+
+    <color name="summer">#44eebd82</color>
+    <color name="fall">#44d8d27e</color>
+    <color name="winter">#44a1c1da</color>
+    <color name="spring">#448da64b</color>
 </resources>

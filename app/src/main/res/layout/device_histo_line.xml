@@ -23,60 +23,39 @@
 
         <TextView
             android:id="@+id/content"
-            android:layout_width="295dp"
-            android:layout_height="27dp"
+            android:layout_width="366dp"
+            android:layout_height="28dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgDevice"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imgDevice"
-            android:layout_width="64dp"
-            android:layout_height="65dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_notifications_black_24dp" />
+            android:gravity="left|center_vertical"
+            android:text="test de text"/>
 
         <TextView
             android:id="@+id/txtDetails1"
-            android:layout_width="295dp"
-            android:layout_height="24dp"
+            android:layout_width="169dp"
+            android:layout_height="28dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgDevice"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/content" />
 
         <TextView
             android:id="@+id/txtDetails2"
-            android:layout_width="295dp"
-            android:layout_height="wrap_content"
+            android:layout_width="195dp"
+            android:layout_height="24dp"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="20dp"
             android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgDevice"
-            app:layout_constraintTop_toBottomOf="@+id/txtDetails1" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/txtDetails1" />
 
 
     </android.support.constraint.ConstraintLayout>

@@ -4,6 +4,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="firebase_web_host" translatable="false">nenbeg-smart.firebaseapp.com</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navigation_add_title">Add</string>
@@ -12,6 +14,8 @@
 
     <string name="deviceIDtest" translatable="false">AZl0feOBbofkPl</string>
     <string name="default_notification_channel_id">NENB</string>
+
+    <string name="deviceHisto">%1$s Historic</string>
 
     <!-- Strings related to Settings -->
 
@@ -127,6 +131,13 @@
     <string name="notification_listener_service_explanation">My Notif Listner Serv</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="deviceName">Name</string>
+    <string name="basicInofs">Basic Infos</string>
+    <string name="OtherInofs">Other Infos</string>
+    <string name="deviceNetworkInfos">Device network Infos</string>
+    <string name="deviceSharing">Device Sharing</string>
+    <string name="deviceRemove">Remove Device</string>
+    <string name="deviceReset">Reset Device</string>
 
 
 </resources>

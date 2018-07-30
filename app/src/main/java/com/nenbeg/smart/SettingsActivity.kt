@@ -133,6 +133,7 @@ class SettingsActivity : AppCompatPreferenceActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             addPreferencesFromResource(R.xml.pref_data_sync)
+
             setHasOptionsMenu(true)
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences

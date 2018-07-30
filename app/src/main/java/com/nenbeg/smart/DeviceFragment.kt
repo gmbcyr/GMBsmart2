@@ -3,14 +3,27 @@ package com.nenbeg.smart
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import com.gmb.bbm2.tools.adapter.MyDeviceBeanAdapter
+import com.google.firebase.firestore.Query
+import com.nenbeg.smart.allstatic.DB_NAME
+import com.nenbeg.smart.allstatic.getFireStoreEditor
+import com.nenbeg.smart.app.NenbegApp
+import com.nenbeg.smart.app.NenbegApp.Companion.userOwnerEmail
+import com.nenbeg.smart.app.NenbegApp.Companion.userOwnerUid
 import com.nenbeg.smart.dummy.DummyContent.DummyItem
+import com.nenbeg.smart.model.MyDeviceBean
+import com.nenbeg.smart.tools.firestore.MyFirestoreEditor
 import com.tuya.smart.sdk.TuyaUser
 import com.tuya.smart.sdk.bean.DeviceBean
+import org.json.JSONObject
 
 
 /**
@@ -18,13 +31,25 @@ import com.tuya.smart.sdk.bean.DeviceBean
  * Activities containing this fragment MUST implement the
  * [DeviceFragment.OnListFragmentInteractionListener] interface.
  */
-class DeviceFragment : Fragment() {
+class DeviceFragment : Fragment(), MyDeviceBeanAdapter.OnItemSelectListener {
+
+
+    override fun onItemSelected(document: MyDeviceBean, twoPane: Boolean) {
+
+        listener?.onListFragmentInteraction(document)
+    }
+
+
 
     // TODO: Customize parameters
     private var columnCount = 1
      val TAG:String="DeviceFragment"
 
     private var listener: OnListFragmentInteractionListener? = null
+    lateinit var fsEdit: MyFirestoreEditor
+    lateinit var mQuery: Query
+    lateinit var mAdapter :  MyDeviceBeanAdapter
+    lateinit var navControl: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +59,17 @@ class DeviceFragment : Fragment() {
         }
 
 
+
         // Here notify the fragment that it should participate in options menu handling.
         setHasOptionsMenu(true);
+
+        fsEdit = getFireStoreEditor(this.requireContext())
+
+
     }
+
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -45,10 +78,20 @@ class DeviceFragment : Fragment() {
 
         val recyView = view.findViewById<RecyclerView>(R.id.list)
 
+
+        //generateDevicesListTest();
+
+
+        mQuery = fsEdit.getQueryFromCollection(MyFirestoreEditor.COLLECTION_DEVICES, 100)//.whereEqualTo(MyDeviceBean.FIELD_NAME_USER_OWNER_EMAIL,NenbegApp().userOwnerEmail)
+
+
+
         // Set the adapter
         if (recyView is RecyclerView) {
 
             //val listDevices= TuyaUser.getDeviceInstance().getDevList();
+
+            Log.e("DeviceFragment","DeviceFragment onCreateView is recyView pos 0->")
 
             val listDevices= generateDevicesList()
 
@@ -57,12 +100,106 @@ class DeviceFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyDeviceRecyclerViewAdapter(listDevices, listener)
+
+
+
+
+                Log.e("DeviceFragment","DeviceFragment onCreateView is recyView pos 1->")
+                mAdapter =  MyDeviceBeanAdapter(mQuery, this@DeviceFragment,false,this,this@DeviceFragment.activity as AppCompatActivity)
+
+
+//recList.setHasFixedSize(true);
+                val llm = LinearLayoutManager(this.context)
+                llm.orientation = LinearLayoutManager.VERTICAL
+                setLayoutManager(llm)
+
+                Log.e("DeviceFragment","DeviceFragment onCreateView is recyView pos 2->")
+//setListAdapter(mAdapter);
+                setAdapter(mAdapter)
+
+                Log.e("DeviceFragment","DeviceFragment onCreateView is recyView pos 3->"+mAdapter.snapshot)
             }
         }
+
+
+        navControl= Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+
         return view
     }
 
+
+    fun generateDevicesListTest(){
+
+
+        val devList=TuyaUser.getDeviceInstance().getDevList();
+
+
+        Log.e("DeviceFragment","DeviceFragment generateDevicesList list->"+devList)
+
+        /*val devi= TuyaUser.getDeviceInstance().getDev("AZ0on5zxaMYQRu");
+
+        Log.e("DeviceFragment","DeviceFragment generateDevicesList static device->"+devi)*/
+
+        val val1= MyDeviceBean()
+        val1.name="Device1"
+        val1.category="category"
+        val1.devId="dev1"
+
+
+        val val2= MyDeviceBean()
+        val2.name="Device2"
+        val2.category="category"
+        val2.devId="dev2"
+
+
+        val val3= MyDeviceBean()
+        val3.name="Device3"
+        val3.category="category"
+        val3.devId="dev3"
+
+        NenbegApp.run {
+
+            val1.userOwnerEmail=userOwnerEmail
+            val1.userOwnerUid=userOwnerUid
+
+            val2.userOwnerEmail=userOwnerEmail
+            val2.userOwnerUid=userOwnerUid
+
+            val3.userOwnerEmail=userOwnerEmail
+            val3.userOwnerUid=userOwnerUid
+
+            Log.e("DeviceFragment","DeviceFragment generateDevicesList userOwnerEmail->"+userOwnerEmail+"_userOwnerUid ->"+userOwnerUid)
+        }
+
+        //fsEdit.getCollectionRef(MyFirestoreEditor.COLLECTION_DEVICES).document(val1.devId).set(val1)
+
+        //fsEdit.getCollectionRef(MyFirestoreEditor.COLLECTION_DEVICES).document(val2.devId).set(val2)
+
+        //fsEdit.getCollectionRef(MyFirestoreEditor.COLLECTION_DEVICES).document(val3.devId).set(val3)
+
+
+        val retour= listOf<MyDeviceBean>(val1,val2,val3)
+
+
+
+        for(it in retour){
+
+            fsEdit.getCollectionRef(MyFirestoreEditor.COLLECTION_DEVICES).document(it.devId).set(it)
+
+            //fsEdit.addRecord(fsEdit.getCollectionRef(MyFirestoreEditor.COLLECTION_DEVICES).document(it.devId),it,null)
+
+        }
+
+
+
+
+
+
+
+
+        //TuyaUser.getDeviceInstance().devList
+
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
@@ -80,16 +217,23 @@ class DeviceFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            /*R.id.post_stuff -> {
-                Log.d(TAG, "Will post the photo to server")
+
+            R.id.nav_add_device -> {
+
+                var json= JSONObject()
+
+                json.put("id",id)
+
+                val args=Bundle()
+
+
+                args.putString("jsonDevice",json.toString())
+
+                navControl.navigate(R.id.addDeviceFragment,args)
+
+
                 return true
             }
-            R.id.cancel_post -> {
-                Log.d(TAG, "Will cancel post the photo")
-                return true
-            }
-            else -> {
-            }*/
         }
         return super.onOptionsItemSelected(item)
     }
@@ -109,6 +253,19 @@ class DeviceFragment : Fragment() {
         super.onStart()
 
         listener!!.onBackToAccueilFragment("data")
+
+        if (mAdapter != null) {
+            mAdapter.startListening()
+        }
+    }
+
+
+    override fun onStop() {
+        super.onStop()
+
+        if (mAdapter != null) {
+            mAdapter.stopListening()
+        }
     }
 
     override fun onDetach() {
@@ -133,6 +290,9 @@ class DeviceFragment : Fragment() {
 
         fun onBackToAccueilFragment( data:String)
     }
+
+
+
 
     companion object {
 
@@ -160,24 +320,31 @@ class DeviceFragment : Fragment() {
 
             Log.e("DeviceFragment","DeviceFragment generateDevicesList static device->"+devi)*/
 
-            val val1= DeviceBean()
+            val val1= MyDeviceBean()
             val1.name="Device1"
             val1.category="category"
             val1.devId="dev1"
 
-            val val2= DeviceBean()
+            val val2= MyDeviceBean()
             val2.name="Device2"
             val2.category="category"
             val2.devId="dev2"
 
 
-            val val3= DeviceBean()
+            val val3= MyDeviceBean()
             val3.name="Device3"
             val3.category="category"
             val3.devId="dev3"
 
 
-            val retour= listOf<DeviceBean>(val1,val2,val3)
+            val retour= listOf<MyDeviceBean>(val1,val2,val3)
+
+
+
+            for(it in retour){
+
+
+            }
 
             devList.addAll(retour)
 

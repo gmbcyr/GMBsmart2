@@ -13,6 +13,8 @@ class NenbegApp : Application() {
     private var instanceCour:NenbegApp?=null
     lateinit var PACKAGE_NAME: String
 
+
+
     @Synchronized
     fun getInstance(): NenbegApp? {
 
@@ -58,6 +60,13 @@ class NenbegApp : Application() {
 
             err.printStackTrace()
         }
+    }
+
+
+    companion object {
+
+        var userOwnerEmail:String=""
+        var userOwnerUid:String=""
     }
 
 

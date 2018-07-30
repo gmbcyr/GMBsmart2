@@ -9,23 +9,28 @@ import android.support.annotation.Nullable
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.firebase.ui.auth.AuthUI.getApplicationContext
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.flags.impl.SharedPreferencesFactory.getSharedPreferences
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import com.nenbeg.smart.app.NenbegInstallation
 import com.nenbeg.smart.tools.firestore.MyFirestoreEditor
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
+import org.json.JSONObject
+import java.lang.StringBuilder
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 public val DEFAULT_ID_ALARM = 20558
-public val DB_NAME = "nbgdb"
+public val DB_NAME = "nbgsmartdb"
 
 public val PREF_FOR_DATA_PATH = "DB_PATH_PREF"
+val ALL_DEVICES_PREF_FILE_NAME="all-devices-pref"
+val ALL_DEVICES_PREF_DATA_JSON="all-devices-pref-data-json"
+val ALL_DEVICES_PREF_LIST_JSON="all-devices-pref-list-json"
 public val ROOT_USER_PATH = "rootUserDoc"
 public val USER_EMAIL = "userEmail"
 public val DEVICE_ID = "deviceID"
@@ -65,6 +70,20 @@ public val notifSendLock = Any()
 
 
 
+/*************************************************Some DEVICE PREF FIELDS***********************************************************/
+
+val DEVICE_PREF_NOTIF_ON_ALARM="notif-on-alarm"
+val DEVICE_PREF_NOTIF_ON_BATTERY="notif-on-battery"
+val DEVICE_PREF_NOTIF_IS_CRITICAL="is-critical"
+
+val DEVICE_PREF_NAME="name"
+val DEVICE_PREF_CATEGORY="category"
+val DEVICE_PREF_GROUP="group"
+val DEVICE_PREF_LOCATION="location"
+
+
+fun ClosedRange<Int>.myRandomInt() =
+        Random().nextInt((endInclusive + 1) - start) +  start
 
 /*******************************************************************Static field for FCM exchance********************************************************/
 val NENB_TYPE_MSG="nenbTypeMessage"
@@ -868,4 +887,189 @@ private fun sendRegistrationToServer(context: Context,id: String, data: Map<Stri
     val editor = MyFirestoreEditor(context)
 
     editor.saveInitParam(id, data, null, false, data)
+}
+
+
+
+
+
+
+/********************************SAVE ALL DEVICES PREFERENCES IN SHAREPREFERENCES********************************************************/
+fun getDevicePreference(context: Context, deviceId:String):String? {
+
+    try {
+
+   var pref = context.getSharedPreferences(ALL_DEVICES_PREF_FILE_NAME, PRIVATE_MODE)
+
+
+
+    pref?.let {
+
+        it.getString(ALL_DEVICES_PREF_LIST_JSON,null)
+    }?.let {
+
+        var tok=StringTokenizer(it,"#$#*#")
+
+        var hashMap=HashMap<String,String>()
+
+        while (tok.hasMoreTokens()){
+
+            var vals=tok.nextToken().split("->")
+
+            hashMap.put(vals.get(0),vals.get(1))
+        }
+
+        hashMap
+
+    }?.let {
+
+        it.get(deviceId)
+    }?.let {
+
+        return it
+    }
+
+
+
+
+
+
+
+    } catch (ex: Exception) {
+
+        ex.printStackTrace()
+    }
+
+
+    return ""
+
+}
+
+
+
+
+
+fun saveDevicePreference(context: Context, deviceId:String,data:JSONObject):Boolean? {
+
+    try {
+
+        val editor=MyFirestoreEditor(context);
+
+
+
+        var pref = context.getSharedPreferences(ALL_DEVICES_PREF_FILE_NAME, PRIVATE_MODE)
+
+
+        var hashMap=HashMap<String,String>()
+
+        pref?.let {
+
+            it.getString(ALL_DEVICES_PREF_LIST_JSON,null)
+        }?.let {
+
+            var tok=StringTokenizer(it,"#$#*#")
+
+
+
+            while (tok.hasMoreTokens()){
+
+                var vals=tok.nextToken().split("->")
+
+                hashMap.put(vals.get(0),vals.get(1))
+            }
+
+            hashMap
+
+        }
+
+        hashMap.put(deviceId,data.toString())
+
+        var build=StringBuilder()
+
+        for(k in hashMap.keys){
+
+            build.append(k+"->"+hashMap.get(k)+"#$#*#")
+        }
+
+
+
+        var edit=pref.edit()
+        edit.putString(ALL_DEVICES_PREF_LIST_JSON,build.toString())
+        edit.commit()
+
+            return true
+
+
+
+
+
+
+
+
+    } catch (ex: Exception) {
+
+        ex.printStackTrace()
+    }
+
+
+    return false
+
+}
+
+
+
+
+
+fun getDevicePreferenceAsJson(context: Context, deviceId:String):JSONObject {
+
+    var jsonDevice=JSONObject()
+    jsonDevice.put("id",deviceId)
+
+    try {
+
+
+        val strPref=getDevicePreference(context,deviceId)
+
+        if(strPref?.isNotBlank() as Boolean){
+
+            jsonDevice=JSONObject(strPref)
+        }
+
+
+
+
+
+
+    } catch (ex: Exception) {
+
+        ex.printStackTrace()
+    }
+
+
+    return jsonDevice
+
+}
+
+
+fun getRandomDateBetween(yearMin:Int,yearMax:Int):Timestamp{
+
+    val dfDateTime = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
+    val year = randBetween(yearMin, yearMax)// Here you can set Range of years you need
+    val month = randBetween(0, 11)
+    val hour = randBetween(9, 22) //Hours will be displayed in between 9 to 22
+    val min = randBetween(0, 59)
+    val sec = randBetween(0, 59)
+
+
+    val gc = GregorianCalendar(year, month, 1)
+    val day = randBetween(1, gc.getActualMaximum(GregorianCalendar.DAY_OF_MONTH))
+
+    gc.set(year, month, day, hour, min, sec)
+
+    return Timestamp(gc.time)
+}
+
+
+fun randBetween(start: Int, end: Int): Int {
+    return start + Math.round(Math.random() * (end - start)).toInt()
 }

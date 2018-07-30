@@ -3,6 +3,7 @@ package com.nenbeg.smart
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import kotlinx.android.synthetic.main.activity_device_historic.*
 
 class DeviceHistoric : AppCompatActivity() {
@@ -30,5 +31,9 @@ class DeviceHistoric : AppCompatActivity() {
         setContentView(R.layout.activity_device_historic)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        return super.onCreateOptionsMenu(menu)
     }
 }

@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.nenbeg.smart.R;
@@ -30,6 +31,7 @@ import com.tuya.smart.sdk.bean.DeviceBean;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,14 +68,13 @@ public class MyFirestoreEditor {
 
     private static final String TAG = "MyFirestoreEditor";
 
-    public static String COLLECTION_CATEGORY = "Categories";
-    public static String COLLECTION_STATEMENT = "BBMstatements";
-    public static String COLLECTION_ONTIMENOTIF = "OntimeNotifs";
-    public static String COLLECTION_REMINDER = "Reminders";
-    public static String COLLECTION_MY_DEVICES="MyDevices";
+    public static String COLLECTION_CATEGORY = "categories";
+    public static String COLLECTION_LOCATIONS = "locations";
+    public static String COLLECTION_DEVICES = "deviceBean";
+    public static String COLLECTION_DEVICES_HISTO="device-histo";
+    public static String COLLECTION_DEVICES_SHARED_USERS="device-shared-users";
     public static String COLLECTION_MY_USERS="my-users";
     public static String COLLECTION_MY_USERS_DEVICES="my-users-devices";
-    public static String COLLECTION_BUDGET = "Budgets";
     public static String COLLECTION_MY_SETTINGS = "MySettings";
 
     Context context;
@@ -99,11 +100,19 @@ public class MyFirestoreEditor {
 
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
+                .setTimestampsInSnapshotsEnabled(true)
                 .build();
         db.setFirestoreSettings(settings);
         cal = new GregorianCalendar();
         cal.setTimeInMillis(System.currentTimeMillis());
         mArrayList = new ArrayList<>();
+
+
+        /*java.util.Date date = snapshot.getDate("created_at");
+    // New:
+    Timestamp timestamp = snapshot.getTimestamp("created_at");
+    java.util.Date date = timestamp.toDate();*/
+
 
     }
 
@@ -121,22 +130,36 @@ public class MyFirestoreEditor {
 
     public CollectionReference getCollectionRef(String collectionName) {
 
-        String basicRef = getBasicRef();
-        CollectionReference collectionRef = db.collection(basicRef + collectionName);
 
-        return collectionRef;
+
+        if(collectionName==null || collectionName.equalsIgnoreCase("")) return null;
+
+        if(collectionName.equalsIgnoreCase(COLLECTION_DEVICES)){
+
+            return db.collection(getRootInfoscRef() + collectionName);
+
+
+        }
+        else{
+
+            return db.collection(getBasicRef() + collectionName);
+        }
+
     }
 
 
     public Query getQueryFromCollection(String collectionName, int LIMIT) {
 
         String basicRef = getBasicRef();
-        Log.e("MyFirEditor","this is query text before->"+basicRef+collectionName);
+
+        if(COLLECTION_DEVICES.equalsIgnoreCase(collectionName))basicRef=getRootInfoscRef();
+
+        //Log.e("MyFirEditor","this is query text before->"+basicRef+collectionName);
         Query q = db.collection(basicRef + collectionName)
                 //.orderBy("avgRating", Query.Direction.DESCENDING)
                 .limit(LIMIT);
 
-        Log.e("MyFirEditor","this is query text->"+q.toString());
+
         return q;
 
 
@@ -237,6 +260,12 @@ public class MyFirestoreEditor {
         return AllStaticKt.getDB_NAME() + "/" + dbUserId + "/";
     }
 
+
+    public String getRootInfoscRef() {
+
+        return AllStaticKt.getDB_NAME() + "/RootInfos/" ;
+    }
+
     public CollectionReference getUserCollectionRef() {
 
 
@@ -244,6 +273,18 @@ public class MyFirestoreEditor {
 
         return collectionRef;
     }
+
+
+
+    public CollectionReference getDeviceBeanCollectionRef() {
+
+
+        CollectionReference collectionRef =db.collection(getRootInfoscRef() + COLLECTION_DEVICES);
+
+        return collectionRef;
+    }
+
+
 
 
     public CollectionReference getUserDevicesCollectionRef() {
@@ -368,10 +409,37 @@ public class MyFirestoreEditor {
     public Task<Void> saveInitParam(String id,Object data, OnCompleteListener listener,boolean newInit,Map<String ,Object> dataToUpdate) {
 
 
+        // Create a new user with a first and last name
+        /*Map<String, Object> user = new HashMap<>();
+        user.put("first", "Ada");
+        user.put("last", "Lovelace");
+        user.put("born", 1815);
+        user.put("dateIn",new Date().toString());
+
+// Add a new document with a generated ID
+        getDb().collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+*/
+
+
         try {
 
 
-                DocumentReference ref=getUserDevicesCollectionRef().document(id);
+
+
+            DocumentReference ref=getUserDevicesCollectionRef().document(id);
 
 
 
@@ -406,6 +474,7 @@ public class MyFirestoreEditor {
 
 
         } catch (Exception e) {
+            Log.e("MyAlarmService", "MyAlarmService saveInitParam  ERROR->");
             e.printStackTrace();
         } finally {
             //daoSession.getDatabase().endTransaction();
@@ -448,7 +517,7 @@ public class MyFirestoreEditor {
         values.put("isOnline",true);
         values.put("name",notif.name);
 
-        DocumentReference docRef=getCollectionRef(COLLECTION_ONTIMENOTIF).document(notif.devId);
+        DocumentReference docRef=getCollectionRef(COLLECTION_DEVICES).document(notif.devId);
 
         OnCompleteListener listener=new OnCompleteListener() {
             @Override
@@ -583,7 +652,7 @@ public class MyFirestoreEditor {
 
 
 
-        DocumentReference docRef=getCollectionRef(COLLECTION_ONTIMENOTIF).document(notif.devId);
+        DocumentReference docRef=getCollectionRef(COLLECTION_CATEGORY).document(notif.devId);
 
         OnCompleteListener listener=new OnCompleteListener() {
             @Override
@@ -692,7 +761,7 @@ public class MyFirestoreEditor {
 
                 if(list!=null){
 
-                    deleteAllRecord(COLLECTION_ONTIMENOTIF,(ArrayList<DocumentSnapshot>) list.getDocuments(),null);
+                    deleteAllRecord(COLLECTION_CATEGORY,(ArrayList<DocumentSnapshot>) list.getDocuments(),null);
                 }
             }
         };

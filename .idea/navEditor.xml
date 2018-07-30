@@ -103,13 +103,18 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="816" />
-                            <option name="y" value="344" />
+                            <option name="x" value="865" />
+                            <option name="y" value="328" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_deviceFragment_to_deviceEventFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="nav_add_device_to_setting_fragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -167,6 +172,18 @@
                               </value>
                             </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="deviceSettingFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1339" />
+                            <option name="y" value="300" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>

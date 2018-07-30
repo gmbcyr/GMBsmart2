@@ -130,7 +130,7 @@ class MyBatteryLevel(context: Context, attrs: AttributeSet) : LinearLayout(conte
 
             if(ind>=i){
 
-                tab.get(i).setBackgroundColor(battFillColor)
+                tab.get(i).setBackgroundResource(R.drawable.back_battery_cell)
             }
         }
 
@@ -148,6 +148,7 @@ class MyBatteryLevel(context: Context, attrs: AttributeSet) : LinearLayout(conte
 
         private val DEFAULT_LEVEL=0
         private val DEFAULT_COLOR= Color.CYAN
+        private val DEFAULT_COLOR_BORDER= Color.BLACK
         private val DEFAULT_SHOW_TEXT=true
         private val DEFAULT_TEXT_SHOWN="LEVEL "
 
